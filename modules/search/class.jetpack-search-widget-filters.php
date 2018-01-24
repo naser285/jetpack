@@ -29,6 +29,8 @@ class Jetpack_Search_Widget_Filters extends WP_Widget {
 
 		if ( is_admin() ) {
 			add_action( 'sidebar_admin_setup', array( $this, 'widget_admin_setup' ) );
+		} else {
+			add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_frontend_scripts' ) );
 		}
 
 		add_action( 'jetpack_search_render_filters_widget_title', array( $this, 'render_widget_title' ), 10, 3 );
@@ -72,6 +74,10 @@ class Jetpack_Search_Widget_Filters extends WP_Widget {
 		) );
 
 		wp_enqueue_script( 'widget-jetpack-search-filters' );
+	}
+
+	function enqueue_frontend_scripts() {
+		wp_enqueue_style( 'jetpack-search-widget', plugins_url( 'modules/search/css/search-widget-frontend.css', JETPACK__PLUGIN_FILE ) );
 	}
 
 	private function get_sort_types() {
@@ -742,7 +748,8 @@ class Jetpack_Search_Widget_Filters extends WP_Widget {
 		}
 
 		?>
-		<h4 class="widget-title"><?php esc_html_e( 'Current Filters', 'jetpack' ); ?></h4>
+
+		<h4 class="jetpack-search-filters-widget__sub-heading"><?php esc_html_e( 'Current Filters', 'jetpack' ); ?></h4>
 		<ul>
 			<?php foreach ( $active_buckets as $item ) : ?>
 				<li>
@@ -774,7 +781,9 @@ class Jetpack_Search_Widget_Filters extends WP_Widget {
 	 * @param array $filter
 	 */
 	function render_filter( $filter ) { ?>
-		<h4  class="widget-title"><?php echo esc_html( $filter['name'] ); ?></h4>
+		<h4 class="jetpack-search-filters-widget__sub-heading">
+			<?php echo esc_html( $filter['name'] ); ?>
+		</h4>
 		<ul>
 			<?php foreach ( $filter['buckets'] as $item ) : ?>
 				<li>
